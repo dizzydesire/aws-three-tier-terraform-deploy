@@ -68,18 +68,3 @@ jobs:
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-# Triggering runner again
-# Force re-run
-name: Test Runner Connection
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  ping-runner:
-    runs-on: self-hosted
-    steps:
-      - name: Say Hello
-        run: echo "🎉 Runner is working!"
