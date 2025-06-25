@@ -1,14 +1,15 @@
 
 resource "aws_db_subnet_group" "mysql_subnet_group" {
-  name       = "${var.environment}-mysql-subnet-group"
+  name       = "${lower(var.environment)}-mysql-subnet-group"
   subnet_ids = var.private_subnet_db_ids
   tags = {
-    Name        = "${var.environment}-mysql-subnet-group"
+   name = "${lower(var.environment)}-mysql-subnet-group"
+
     Environment = var.environment
   }
 }
 resource "aws_db_instance" "mysql_db_instance" {
-  identifier              = "${var.environment}-mysql-db"
+ identifier = "${replace(lower(var.environment), "[^a-z0-9-]", "")}-mysql-db"
   engine                  = "mysql"
   engine_version          = "8.0"
   instance_class          = var.db_instance_class
@@ -22,7 +23,8 @@ resource "aws_db_instance" "mysql_db_instance" {
   skip_final_snapshot     = true
 
   tags = {
-    Name        = "${var.environment}-mysql-db-instance"
+  name = "${lower(var.environment)}-mysql-subnet-group"
+
     Environment = var.environment
   }
 
