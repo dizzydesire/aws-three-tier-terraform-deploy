@@ -43,10 +43,7 @@ variable "private_subnet_db_ids" {
   type        = list(string)
 }
 
-<<<<<<< HEAD
-=======
 # variable "db_subnet_group_name" {
 #   description = "Name of the DB subnet group"
 #   type        = string
 # }
->>>>>>> cf7fb3e (Completed the terraform script)

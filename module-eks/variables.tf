@@ -91,11 +91,7 @@ variable "cluster_name" {
 
 variable "repository_name" {
   
-<<<<<<< HEAD
 }
 
 variable "domain-name" {}
 variable "email" {}
-=======
-}
->>>>>>> cf7fb3e (Completed the terraform script)

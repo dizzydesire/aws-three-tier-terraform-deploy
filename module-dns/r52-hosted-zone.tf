@@ -10,11 +10,7 @@ resource "aws_route53_zone" "r53_zone" {
 }
 resource "aws_route53_record" "name" {
     zone_id = aws_route53_zone.r53_zone.zone_id
-<<<<<<< HEAD
     name    = "bank.${var.domain-name}" # Use a subdomain for CNAME
-=======
-    name    = "api.${var.domain-name}" # Use a subdomain for CNAME
->>>>>>> cf7fb3e (Completed the terraform script)
     type    = "CNAME"
     ttl     = 300
     records = [var.nginx_lb_ip]
@@ -22,7 +18,6 @@ resource "aws_route53_record" "name" {
 
 resource "aws_route53_record" "name1" {
     zone_id = aws_route53_zone.r53_zone.zone_id
-<<<<<<< HEAD
     name    = "bankapi.${var.domain-name}" # Use a subdomain for CNAME
     type    = "CNAME"
     ttl     = 300
@@ -31,9 +26,6 @@ resource "aws_route53_record" "name1" {
 resource "aws_route53_record" "name2" {
     zone_id = aws_route53_zone.r53_zone.zone_id
     name    = "argocd.${var.domain-name}" # Use a subdomain for CNAME
-=======
-    name    = "app.${var.domain-name}" # Use a subdomain for CNAME
->>>>>>> cf7fb3e (Completed the terraform script)
     type    = "CNAME"
     ttl     = 300
     records = [var.nginx_lb_ip]
