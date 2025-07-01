@@ -86,7 +86,7 @@ variable "zone_name" {
 variable "domain-name" {
   description = "Domain name to be created"
   type        = string
-  default     = "myapp.example.com"
+  default     = "dizzytech.online"
 }
 
 variable "namecheap_api_user" {
@@ -164,5 +164,5 @@ variable "repository_name" {
 variable "email" {
   description = "Email address for notifications and certificates"
   type        = string
-  default     = "support@digitalwitchng.online"
+  default     = "desireoduma@outlook.com"
 }

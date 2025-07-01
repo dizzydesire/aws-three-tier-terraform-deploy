@@ -1,16 +1,16 @@
 resource "aws_route53_zone" "r53_zone" {
     name = var.domain-name
-    comment = "Managed by Terraform"
+    comment = "hosted zone for dizzytech.online"
     force_destroy = true
     
  # lifecycle {
     #prevent_destroy = true
   #}
 
-  
-lifecycle {
-    ignore_changes = [name_servers]
-  }
+
+#lifecycle {
+ #   ignore_changes = [name_servers]
+  #}
 
 
     
