@@ -19,6 +19,9 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: us-east-1 
+      TF_VAR_namecheap_api_key: ${{ secrets.NAMECHEAP_API_KEY }}
+      TF_VAR_namecheap_username: ${{ secrets.NAMECHEAP_USERNAME }}
+      TF_VAR_namecheap_client_ip: ${{ secrets.NAMECHEAP_CLIENT_IP }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
