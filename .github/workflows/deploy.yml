@@ -64,7 +64,7 @@ jobs:
 
       # Optional: Uncomment to apply
       - name: Terraform Apply
-         run: terraform apply -auto-approve
+        run: terraform apply -auto-approve
 
        #name: Terraform Destroy
         #run: terraform destroy -auto-approve
