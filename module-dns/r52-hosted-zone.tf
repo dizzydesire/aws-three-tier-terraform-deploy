@@ -3,10 +3,15 @@ resource "aws_route53_zone" "r53_zone" {
     comment = "Managed by Terraform"
     force_destroy = true
     
-  lifecycle {
-    prevent_destroy = true
+ # lifecycle {
+    #prevent_destroy = true
+  #}
+
+  
+lifecycle {
+    ignore_changes = [name_servers]
   }
-    
+
 
     
     tags = {
