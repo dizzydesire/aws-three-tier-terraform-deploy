@@ -1,24 +1,19 @@
-#resource "aws_route53_zone" "r53_zone" {
- #   name = var.domain-name
-  #  comment = "hosted zone for dizzytech.online"
-   # force_destroy = true
+resource "aws_route53_zone" "r53_zone" {
+    name = var.domain-name
+    comment = "hosted zone for dizzytech.online"
+    force_destroy = true
     
- # lifecycle {
-    #prevent_destroy = true
-  #}
-
-
-#lifecycle {
- #   ignore_changes = [name_servers]
-  #}
-
+ lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [name_servers]
+  }
 
     
-   # tags = {
-    #    Name        = "${var.environment}-hosted-zone"
-     #   Environment = var.environment
-    #}
-#}
+    tags = {
+        Name        = "${var.environment}-hosted-zone"
+        Environment = var.environment
+    }
+}
 resource "aws_route53_record" "name" {
     zone_id = aws_route53_zone.r53_zone.zone_id
     name    = "bank.${var.domain-name}" # Use a subdomain for CNAME
