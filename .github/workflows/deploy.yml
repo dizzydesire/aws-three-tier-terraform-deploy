@@ -1,12 +1,12 @@
 name: Deploy to AWS with Terraform
 # Manual trigger test
 
-
 on:
   push:
     branches:
-      - main
+    - main
   workflow_dispatch:
+
 
 permissions:
   contents: write
@@ -18,56 +18,71 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: us-east-1 
+      AWS_REGION: us-east-1
       TF_VAR_namecheap_api_key: ${{ secrets.NAMECHEAP_API_KEY }}
       TF_VAR_namecheap_username: ${{ secrets.NAMECHEAP_USERNAME }}
       TF_VAR_namecheap_client_ip: ${{ secrets.NAMECHEAP_CLIENT_IP }}
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      #- name: Setup GitHub OIDC
-       # run: | 
-        #  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-         # unzip awscliv2.zip
-          #sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+    # - name: Setup GitHub OIDC
+    #   run: | 
+    #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    #     unzip awscliv2.zip
+    #     sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 
-      - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Configure AWS credentials using OIDC
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-east-1
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Install tfsec for security scanning
-        run: |
-          curl -sLo tfsec https://github.com/aquasecurity/tfsec/releases/download/v1.28.11/tfsec-linux-amd64
-          chmod +x tfsec
-          ./tfsec --version
+    - name: Install tfsec for security scanning
+      run: |
+        curl -sLo tfsec https://github.com/aquasecurity/tfsec/releases/download/v1.28.11/tfsec-linux-amd64
+        chmod +x tfsec
+        ./tfsec --version
 
-      - name: Terraform Init
-        run: terraform init
+    - name: Terraform Init
+      run: terraform init
 
-      - name: Terraform Format
-        run: terraform fmt
+    - name: Terraform Format
+      run: terraform fmt
 
-      - name: Terraform Validate
-        run: terraform validate
+    - name: Terraform Validate
+      run: terraform validate
 
-      - name: tfsec Security Scan
-        run: ./tfsec . || true
+    - name: tfsec Security Scan
+      run: ./tfsec . || true
 
-      - name: Terraform Plan
-        run: terraform plan
+    - name: Terraform Plan
+      run: terraform plan
 
-      # Optional: Uncomment to apply
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+    # Optional: Uncomment to apply
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
 
-       #name: Terraform Destroy
-        #run: terraform destroy -auto-approve
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
+    - name: Authenticate to EKS Cluster
+      run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }} --region us-east-1
+
+    - name: Deploying the ClusterIssuer to EKS
+      run: kubectl apply -f ClusterIssuer.yaml
+
+    - name: Deploying argocd ingress rule to EKS
+      run: kubectl apply -f ingress-argocd.yaml -n argocd
+    # - name: Terraform Destroy
+    #   run: terraform destroy -auto-approve
