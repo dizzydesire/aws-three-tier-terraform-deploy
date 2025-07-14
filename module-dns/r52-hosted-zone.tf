@@ -4,7 +4,7 @@ resource "aws_route53_zone" "r53_zone" {
     force_destroy = true
     
  lifecycle {
-    prevent_destroy = true
+    
     ignore_changes  = [name_servers]
   }
 
